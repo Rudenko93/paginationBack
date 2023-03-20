@@ -1,1 +1,1 @@
-export * from "./ModeSwitcher"
+export { ModeSwitcher } from "./ModeSwitcher"

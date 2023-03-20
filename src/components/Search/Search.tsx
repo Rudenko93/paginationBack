@@ -1,3 +1,15 @@
+import { useState } from "react"
+
 export const Search: React.FC = () => {
-  return <div>Search</div>
+  const [search, setSearch] = useState<string>("")
+
+  return (
+    <>
+      <input
+        placeholder="search.."
+        value={search}
+        onChange={(e) => setSearch(e.target.value)}
+      />
+    </>
+  )
 }
