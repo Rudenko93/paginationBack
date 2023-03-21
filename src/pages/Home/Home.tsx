@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useContext, useEffect, useState } from "react"
 import { CardList } from "../../components/CardList"
 import { Controls } from "../../components/Controls"
 import { ICard } from "../../types"
@@ -8,6 +8,8 @@ export type Status = "error" | "loading" | "success"
 export const Home = () => {
   const [cards, setCards] = useState<ICard[]>([])
   const [status, setStatus] = useState<Status>("loading")
+
+  // const contolContext = useContext()
 
   useEffect(() => {
     const fetchCards = async () => {

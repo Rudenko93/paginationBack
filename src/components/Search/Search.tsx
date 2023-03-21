@@ -7,7 +7,7 @@ export const Search: React.FC = () => {
     <>
       <input
         placeholder="search.."
-        value={search}
+        type="text"
         onChange={(e) => setSearch(e.target.value)}
       />
     </>
