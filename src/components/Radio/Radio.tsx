@@ -1,28 +1,30 @@
-import { useState } from "react"
+import { useHomeContext } from "../../contexts/HomeContext"
 
 export const Radio: React.FC = () => {
-  const [autoPaging, setAutoPaging] = useState<string>("false")
+  const { setAutoPaging } = useHomeContext()
+
   return (
     <>
       <fieldset>
         Auto Paging
         <input
+          className="input"
           type="radio"
           name="pagination"
           value="false"
           id="false"
           defaultChecked={true}
-          onChange={() => setAutoPaging("false")}
+          onChange={() => setAutoPaging(false)}
         />
-        <label htmlFor="false">False</label>
+        <label htmlFor="false">Off</label>
         <input
           type="radio"
           name="pagination"
           value="true"
           id="true"
-          onChange={() => setAutoPaging("true")}
+          onChange={() => setAutoPaging(true)}
         />
-        <label htmlFor="true">True</label>
+        <label htmlFor="true">On</label>
       </fieldset>
     </>
   )

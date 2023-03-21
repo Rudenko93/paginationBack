@@ -1,5 +1,13 @@
-import { createContext, useContext, useState } from "react"
+import { createContext, memo, useContext, useRef, useState } from "react"
 import { Wrapper } from "./Wrapper"
+
+const useRenderCount = () => {
+  const count = useRef(0)
+
+  count.current++
+
+  return count.current
+}
 
 interface AppContextData {
   value: string
@@ -9,16 +17,6 @@ interface AppContextData {
 const AppContext = createContext<AppContextData | null>(null)
 
 const AppProvider = AppContext.Provider
-
-interface AppConsumerProps {
-  children: (data: AppContextData) => React.ReactElement
-}
-
-const AppConsumer = (props: AppConsumerProps) => {
-  const data = useAppContext()
-
-  return props.children(data)
-}
 
 const useAppContext = () => {
   const data = useContext(AppContext)
@@ -30,34 +28,37 @@ const useAppContext = () => {
   return data
 }
 
-const Form = () => {
+const Form = memo(() => {
+  const renderCount = useRenderCount()
   return (
-    <>
-      <Wrapper
-        title="Form"
-        as="form"
-        style={{
-          width: 300,
-          height: 150,
-        }}>
-        <FormInput />
-      </Wrapper>
-      {console.log("render")}
-    </>
+    <Wrapper
+      title="Form"
+      as="form"
+      style={{
+        width: 300,
+        height: 150,
+      }}>
+      <div>Render count: {renderCount}</div>
+      <FormInput />
+    </Wrapper>
   )
-}
+})
 
 const FormInput = () => {
   const { setValue } = useAppContext()
+  const renderCount = useRenderCount()
 
   return (
     <Wrapper title="FormInput">
+      <div>Render count: {renderCount}</div>
       <input type="text" onChange={(e) => setValue(e.target.value)} />
     </Wrapper>
   )
 }
 
-const TextDisplay = () => {
+const TextDisplay = memo(() => {
+  const renderCount = useRenderCount()
+
   return (
     <Wrapper
       title="TextDisplay"
@@ -65,23 +66,21 @@ const TextDisplay = () => {
         height: 300,
         width: 300,
       }}>
+      <div>Render count: {renderCount}</div>
       <Text />
-      <TextConsumer />
     </Wrapper>
   )
-}
+})
 
 const Text = () => {
   const { value } = useAppContext()
+  const renderCount = useRenderCount()
 
-  return <Wrapper title="Text">{value}</Wrapper>
-}
-
-const TextConsumer = () => {
   return (
-    <AppConsumer>
-      {({ value }) => <Wrapper title="TextConsumer">{value}</Wrapper>}
-    </AppConsumer>
+    <Wrapper title="Text">
+      Render Count: {renderCount}
+      <div>{value}</div>
+    </Wrapper>
   )
 }
 

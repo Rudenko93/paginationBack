@@ -7,6 +7,7 @@
 }
 
 body {
+  overflow-y: scroll;
   margin: 0;
   font-family: "Segoe UI", Roboto, sans-serif;
 }
@@ -52,4 +53,17 @@ fieldset {
 
 img {
   max-width: 100%;
+}
+
+.notification {
+  gap: 1rem;
+}
+
+input#false,
+input#true {
+  margin: 0 5px 0 25px;
+}
+
+.select {
+  margin-left: 10px;
 }

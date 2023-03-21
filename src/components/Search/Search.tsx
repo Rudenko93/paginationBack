@@ -1,8 +1,7 @@
-import { useState } from "react"
+import { useHomeContext } from "../../contexts/HomeContext"
 
 export const Search: React.FC = () => {
-  const [search, setSearch] = useState<string>("")
-
+  const { setSearch } = useHomeContext()
   return (
     <>
       <input
