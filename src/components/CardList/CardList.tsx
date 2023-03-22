@@ -16,7 +16,8 @@ export const CardList: React.FC<ICardListProps> = memo(({ cards, status }) => {
       case "error":
         return <h1>error...</h1>
       case "success":
-        if (cards.length === 0) return <h1>No matches..</h1>
+        if (cards.length === 0)
+          return <h1 className="notification">No matches..</h1>
         return cards.map((card) => <Card key={card.id} card={card} />)
     }
   }

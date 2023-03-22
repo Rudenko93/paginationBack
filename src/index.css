@@ -55,10 +55,6 @@ img {
   max-width: 100%;
 }
 
-.notification {
-  gap: 1rem;
-}
-
 input#false,
 input#true {
   margin: 0 5px 0 25px;
@@ -66,4 +62,30 @@ input#true {
 
 .select {
   margin-left: 10px;
+}
+
+.pagination-wrapper {
+  display: flex;
+  justify-content: center;
+  margin-top: 1rem;
+}
+
+.pagination a {
+  float: left;
+
+  padding: 8px 16px;
+
+  color: black;
+  text-decoration: none;
+
+  transition: background-color 0.3s;
+}
+
+.pagination a.active {
+  color: white;
+  background-color: dodgerblue;
+}
+
+.pagination a:hover:not(.active) {
+  background-color: #ddd;
 }

@@ -2,6 +2,7 @@ import { useEffect, useState } from "react"
 import { HomeProvider } from "../../contexts/HomeContext"
 import { CardList } from "../../components/CardList"
 import { Controls } from "../../components/Controls"
+import { Pagination } from "../../components/Pagination"
 import { ICard } from "../../types"
 
 export type Status = "error" | "loading" | "success"
@@ -12,7 +13,7 @@ export const Home = () => {
 
   const [search, setSearch] = useState<string>("")
   const [autoPaging, setAutoPaging] = useState<boolean>(false)
-  const [limit, setLimit] = useState<string>("10")
+  const [limit, setLimit] = useState<string>("20")
   const [limitDisabled, setLimitDisabled] = useState<boolean>(false)
 
   useEffect(() => {
@@ -26,10 +27,11 @@ export const Home = () => {
         if (!res.ok) {
           setStatus("error")
           throw new Error("failed to fetch")
+        } else {
+          const data = await res.json()
+          setCards(data)
+          setStatus("success")
         }
-        const data = await res.json()
-        setCards(data)
-        setStatus("success")
       } catch (error: any) {
         console.log(error.message)
       }
@@ -50,6 +52,7 @@ export const Home = () => {
         <div className="container">
           <Controls />
           <CardList cards={cards} status={status} />
+          <Pagination />
         </div>
       </div>
     </HomeProvider>
