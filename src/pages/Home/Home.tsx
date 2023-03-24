@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react"
+import { useLocation, useNavigate, useSearchParams } from "react-router-dom"
+import axios from "axios"
 import { HomeProvider } from "../../contexts/HomeContext"
 import { CardList } from "../../components/CardList"
 import { Controls } from "../../components/Controls"
-import { Pagination } from "../../components/Pagination"
-import ReactPaginate from "react-paginate"
 import { ICard } from "../../types"
-import axios from "axios"
+import { useRenderCount } from "../../hooks/useRenderCount"
+import { Pagination } from "../../components/Pagination"
 
 export type Status = "error" | "loading" | "success"
 
@@ -18,25 +19,43 @@ export const Home = () => {
   const [limit, setLimit] = useState<string>("20")
   const [limitDisabled, setLimitDisabled] = useState<boolean>(false)
 
-  const [pageCount, setPageCount] = useState<number>(0)
+  const location = useLocation()
 
+  const pageNumber = parseInt(location.search.split("=")[1])
+    ? parseInt(location.search.split("=")[1])
+    : 1
+
+  const [currentPage, setCurrentPage] = useState<number>(pageNumber)
+  const [pageCount, setPageCount] = useState<number>(1)
+
+  const navigate = useNavigate()
   useEffect(() => {
     const fetchCards = async () => {
       try {
         const res = await axios(
-          `http://localhost:5000/cards${limit && `?&_limit=${limit}`}${
-            search && `&q=${search}`
-          }`
+          `http://localhost:5000/cards/?${
+            currentPage && `_page=${currentPage}`
+          }${limit && `&_limit=${limit}`}${search && `&q=${search}`}`
         )
 
         if (!res.status) {
           setStatus("error")
           throw new Error("failed to fetch")
+        }
+        setCards(res.data)
+        if (res.headers["x-total-count"] === "0") {
+          setPageCount(1)
+          setCurrentPage(1)
         } else {
-          setCards(res.data)
-          setPageCount(
-            Math.ceil(parseInt(res.headers["x-total-count"]) / parseInt(limit))
+          const newPageCount = Math.ceil(
+            parseInt(res.headers["x-total-count"]) / parseInt(limit)
           )
+          if (newPageCount < currentPage) {
+            setPageCount(1)
+            setCurrentPage(1)
+          } else {
+            setPageCount(newPageCount)
+          }
           setStatus("success")
         }
       } catch (error: any) {
@@ -44,12 +63,22 @@ export const Home = () => {
       }
     }
     fetchCards()
-  }, [limit, search])
+  }, [currentPage, limit, search])
+
+  const handlePageChange = (event: Record<string, number>): void => {
+    setCurrentPage(event.selected + 1)
+
+    navigate(
+      `?${currentPage && `_page=${currentPage}`}${limit && `&_limit=${limit}`}${
+        search && `&q=${search}`
+      }`
+    )
+  }
+
   return (
     <HomeProvider
       value={{
         autoPaging,
-        search,
         limitDisabled,
         setSearch,
         setAutoPaging,
@@ -57,22 +86,13 @@ export const Home = () => {
       }}>
       <div className="home-wrapper">
         <div className="container">
+          {useRenderCount()}
           <Controls />
           <CardList cards={cards} status={status} />
-          <ReactPaginate
+          <Pagination
             pageCount={pageCount}
-            initialPage={1}
-            pageRangeDisplayed={2}
-            marginPagesDisplayed={1}
-            onPageChange={() => ""}
-            containerClassName="pagination"
-            breakLinkClassName="page-num"
-            activeLinkClassName="page-active"
-            pageLinkClassName="page-num"
-            nextLinkClassName="page-num"
-            previousLinkClassName="page-num"
-            previousLabel="&lt;"
-            nextLabel="&gt;"
+            currentPage={currentPage}
+            onPageChange={handlePageChange}
           />
         </div>
       </div>

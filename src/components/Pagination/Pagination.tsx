@@ -1,20 +1,38 @@
-export const Pagination: React.FC = () => {
-  return (
-    <div className="pagination-wrapper">
-      <div className="pagination1">
-        <a href="#">&laquo;</a>
-        <a href="#">&lt;</a>
-        <a href="#">1</a>
-        <a className="active" href="#">
-          2
-        </a>
-        <a href="#">3</a>
-        <a href="#">4</a>
-        <a href="#">5</a>
-        <a href="#">6</a>
-        <a href="#">&gt;</a>
-        <a href="#">&raquo;</a>
-      </div>
-    </div>
-  )
+import { memo } from "react"
+import ReactPaginate from "react-paginate"
+
+interface IPaginationProps {
+  pageCount: number
+  currentPage: number
+  pageRangeDisplayed?: number
+  marginPagesDisplayed?: number
+  onPageChange: (arg0: Record<string, number>) => void
 }
+
+export const Pagination: React.FC<IPaginationProps> = memo(
+  ({
+    pageCount,
+    currentPage,
+    onPageChange,
+    pageRangeDisplayed = 3,
+    marginPagesDisplayed = 1,
+  }) => {
+    return (
+      <ReactPaginate
+        pageCount={pageCount}
+        pageRangeDisplayed={pageRangeDisplayed}
+        marginPagesDisplayed={marginPagesDisplayed}
+        forcePage={currentPage - 1}
+        onPageChange={onPageChange}
+        containerClassName="pagination"
+        breakLinkClassName="page-num"
+        activeLinkClassName="page-active"
+        pageLinkClassName="page-num"
+        nextLinkClassName="page-num"
+        previousLinkClassName="page-num"
+        previousLabel="&lt;"
+        nextLabel="&gt;"
+      />
+    )
+  }
+)
