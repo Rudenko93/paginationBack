@@ -1,7 +1,7 @@
 import { useHomeContext } from "../../contexts/HomeContext"
 
 export const Radio: React.FC = () => {
-  const { setAutoPaging } = useHomeContext()
+  const { handleAutoPaging } = useHomeContext()
 
   return (
     <>
@@ -14,7 +14,7 @@ export const Radio: React.FC = () => {
           value="false"
           id="false"
           defaultChecked={true}
-          onChange={() => setAutoPaging(false)}
+          onChange={() => handleAutoPaging(false)}
         />
         <label htmlFor="false">Off</label>
         <input
@@ -22,7 +22,7 @@ export const Radio: React.FC = () => {
           name="pagination"
           value="true"
           id="true"
-          onChange={() => setAutoPaging(true)}
+          onChange={() => handleAutoPaging(true)}
         />
         <label htmlFor="true">On</label>
       </fieldset>

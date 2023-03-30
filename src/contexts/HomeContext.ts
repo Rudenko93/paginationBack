@@ -1,10 +1,10 @@
 import { createContext, useContext } from "react"
 
 interface IHomeContext {
+  search: string
   autoPaging: boolean
-  limitDisabled: boolean
   setSearch: (value: string) => void
-  setAutoPaging: (value: boolean) => void
+  handleAutoPaging: (value: boolean) => void
   setLimit: (value: string) => void
 }
 
